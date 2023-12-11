@@ -8,9 +8,9 @@ void PortDevice::initialize(){
 
 void PortDevice::setOutput(bool value){
     if (value){
-        _port |= _BV(_pin);
+        _port |= (1 << _pin);
     } 
     else{
-        _port &= ~_BV(_pin);
+        _port &= ~(1 << _pin);
     }
 }
