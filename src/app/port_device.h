@@ -13,3 +13,5 @@ private:
     volatile uint8_t& _port;
     uint8_t _pin;
 };
+
+#endif // PORT_DEVICE_H
