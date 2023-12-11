@@ -1,9 +1,9 @@
 #include "port_device.h"
 
-PortDevice::PortDevice(volatile uint8_t& port, uint8_t pin) : _port(port), _pin(pin) {}
+PortDevice::PortDevice(volatile uint8_t& port, volatile uint8_t pin):_port(port), _pin(pin){}
 
 void PortDevice::initialize(){
-    _port |= _BV(_pin);
+    DDRB |= _BV(DDB5);
 }
 
 void PortDevice::setOutput(bool value){

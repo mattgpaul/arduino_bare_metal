@@ -1,22 +1,21 @@
 #include "port_device.h"
 #include <util/delay.h>
+#include <avr/io.h>
 
-int main(){
+int main(void){
+    //PortDevice device(PORTB, PORTB5);
     volatile uint8_t& devicePort = PORTB;
-    uint8_t devicePin = PORTB5;
-
-    PortDevice device(devicePort, devicePin);
-
-    device.initialize();
+    volatile uint8_t devicePin = PORTB5;
+    DDRB |= (1 << DDB5);
 
     while (1){
-        device.setOutput(true);
+        devicePort |= (1 << devicePin);
 
-        _delay_ms(500);
+        _delay_ms(1000);
 
-        device.setOutput(false);
+        devicePort &= ~(1 << devicePin);
 
-        _delay_ms(500);
+        _delay_ms(1000);
     }
 
     return 0;

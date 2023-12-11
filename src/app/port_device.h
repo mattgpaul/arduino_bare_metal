@@ -5,7 +5,7 @@
 
 class PortDevice{
 public:
-    PortDevice(volatile uint8_t& port, uint8_t pin);
+    PortDevice(volatile uint8_t& port, volatile uint8_t pin);
     void initialize();
     void setOutput(bool value);
 
