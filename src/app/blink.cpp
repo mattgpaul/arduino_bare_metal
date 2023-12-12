@@ -5,8 +5,9 @@
 int main(void){
     volatile uint8_t& devicePort = PORTB;
     volatile uint8_t devicePin = PORTB5;
+    volatile uint8_t deviceDirection = DDB5;
 
-    PortDevice led(devicePort, devicePin);
+    PortDevice led(devicePort, devicePin, deviceDirection);
 
     led.initialize();
 

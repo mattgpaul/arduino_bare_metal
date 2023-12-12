@@ -8,8 +8,10 @@ BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
 BIN_DIR = $(BUILD_DIR)/bin
 
+
 # Toolchain
 CC = $(ATMEGA328P_BIN_DIR)/avr-g++
+OBJ_COPY = $(ATMEGA328P_BIN_DIR)/avr-objcopy
 
 # Files
 TARGET = $(BIN_DIR)/blink
@@ -29,11 +31,21 @@ LDFLAGS = -mmcu=$(MCU) -DF_CPU=$(CPU_CLOCK) $(addprefix -L,$(LIB_DIRS)) -Os -g
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(dir $@)
 	$(CC) $(LDFLAGS) $^ -o $@
-	avr-g++ -o blink.bin blink
-	avr-objcopy -O ihex -R .eeprom blink.bin blink.hex
-	sudo avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:blink.hex
 
 ## Compiling
 $(OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $^
+
+# Phonies
+.PHONY: all clean
+
+all: $(TARGET)
+
+clean:
+	$(RM) -r $(BUILD_DIR)
+
+flash: $(TARGET)
+	$(CC) -o $(TARGET).bin $(TARGET)
+	$(OBJ_COPY) -O ihex -R .eeprom $(TARGET).bin $(TARGET).hex
+	sudo avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:$(TARGET).hex
