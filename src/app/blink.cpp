@@ -3,19 +3,21 @@
 #include <avr/io.h>
 
 int main(void){
-    //PortDevice device(PORTB, PORTB5);
     volatile uint8_t& devicePort = PORTB;
     volatile uint8_t devicePin = PORTB5;
-    DDRB |= (1 << DDB5);
+
+    PortDevice led(devicePort, devicePin);
+
+    led.initialize();
 
     while (1){
-        devicePort |= (1 << devicePin);
+        led.setOutput(true);
 
-        _delay_ms(1000);
+        _delay_ms(500);
 
-        devicePort &= ~(1 << devicePin);
+        led.setOutput(false);
 
-        _delay_ms(1000);
+        _delay_ms(500);
     }
 
     return 0;
