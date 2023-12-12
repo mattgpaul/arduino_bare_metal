@@ -13,11 +13,11 @@ int main(void){
     while (1){
         led.setOutput(true);
 
-        _delay_ms(500);
+        _delay_ms(1000);
 
         led.setOutput(false);
 
-        _delay_ms(500);
+        _delay_ms(1000);
     }
 
     return 0;
