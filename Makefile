@@ -12,6 +12,7 @@ BIN_DIR = $(BUILD_DIR)/bin
 # Toolchain
 CC = $(ATMEGA328P_BIN_DIR)/avr-g++
 OBJ_COPY = $(ATMEGA328P_BIN_DIR)/avr-objcopy
+CPPCHECK = cppcheck
 
 # Files
 TARGET = $(BIN_DIR)/blink
@@ -38,7 +39,7 @@ $(OBJ_DIR)/%.o: %.cpp
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 # Phonies
-.PHONY: all clean
+.PHONY: all clean flash cppcheck
 
 all: $(TARGET)
 
@@ -49,3 +50,6 @@ flash: $(TARGET)
 	$(CC) -o $(TARGET).bin $(TARGET)
 	$(OBJ_COPY) -O ihex -R .eeprom $(TARGET).bin $(TARGET).hex
 	sudo avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:$(TARGET).hex
+
+cppcheck:
+	@$(CPPCHECK) --enable=all --error-exitcode=1 --inline-suppr --suppress=missingIncludeSystem -I $(INCLUDE_DIRS) $(SOURCES)
